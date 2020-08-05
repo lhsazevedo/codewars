@@ -1,0 +1,17 @@
+{
+    "name": "lhsazevedo/codewars",
+    "authors": [
+        {
+            "name": "Lucas Azevedo",
+            "email": "lhs_azevedo@hotmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.2"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
