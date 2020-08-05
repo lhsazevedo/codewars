@@ -1,34 +1,36 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
 use PHPUnit\Framework\TestCase;
 
-class MyTestCases extends TestCase
+class FluentCalculatorTest extends TestCase
 {
     public function testBasicValueTests() {
-		$this->assertSame(FluentCalculator::init()->zero(), 0);
-		$this->assertSame(FluentCalculator::init()->one(), 1);
-		$this->assertSame(FluentCalculator::init()->two(), 2);
-		$this->assertSame(FluentCalculator::init()->three(), 3);
-		$this->assertSame(FluentCalculator::init()->four(), 4);
-		$this->assertSame(FluentCalculator::init()->five(), 5);
-		$this->assertSame(FluentCalculator::init()->six(), 6);
-		$this->assertSame(FluentCalculator::init()->seven(), 7);
-		$this->assertSame(FluentCalculator::init()->eight(), 8);
-		$this->assertSame(FluentCalculator::init()->nine(), 9);
-		$this->assertSame(FluentCalculator::init()->one->zero(), 10);
-		$this->assertSame(FluentCalculator::init()->minus->three->zero(), -30);
-        $this->assertSame(FluentCalculator::init()->nine->nine->nine->nine->nine->nine->nine->nine->nine(), 999999999);
+		$this->assertSame(0, FluentCalculator::init()->zero(), 'Zero');
+		$this->assertSame(1, FluentCalculator::init()->one(), 'One');
+		$this->assertSame(2, FluentCalculator::init()->two());
+		$this->assertSame(3, FluentCalculator::init()->three());
+		$this->assertSame(4, FluentCalculator::init()->four());
+		$this->assertSame(5, FluentCalculator::init()->five());
+		$this->assertSame(6, FluentCalculator::init()->six());
+		$this->assertSame(7, FluentCalculator::init()->seven());
+		$this->assertSame(8, FluentCalculator::init()->eight());
+		$this->assertSame(9, FluentCalculator::init()->nine());
+		$this->assertSame(10, FluentCalculator::init()->one->zero());
+		$this->assertSame(-30, FluentCalculator::init()->minus->three->zero());
+        $this->assertSame(999999999, FluentCalculator::init()->nine->nine->nine->nine->nine->nine->nine->nine->nine());
     }
     public function testBasicOperationTests() {
 		$this->assertSame(FluentCalculator::init()->two->one->plus->three(), 24);
 		$this->assertSame(FluentCalculator::init()->one->minus->three(), -2);
 		$this->assertSame(FluentCalculator::init()->two->times->four->five(), 90);
-		$this->assertSame(FluentCalculator::init()->three->three->dividedBy->six(), 5);
+		$this->assertSame(5, FluentCalculator::init()->three->three->dividedBy->six());
 		$this->assertSame(FluentCalculator::init()->two->one->plus->three->times(), 24);
 		$this->assertSame(FluentCalculator::init()->one->minus->three->times(), -2);
 		$this->assertSame(FluentCalculator::init()->two->times->four->five->minus(), 90);
 		$this->assertSame(FluentCalculator::init()->three->three->dividedBy->six->dividedBy(), 5);
-		$this->assertSame(FluentCalculator::init()->two->one->plus->dividedBy->three(), 7);
+		$this->assertSame(7, FluentCalculator::init()->two->one->plus->dividedBy->three());
 		$this->assertSame(FluentCalculator::init()->one->zero->times->minus->three->three(), -23);
 		$this->assertSame(FluentCalculator::init()->two->times->minus->four->five->seven(), -455);
     }
