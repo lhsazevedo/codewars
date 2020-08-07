@@ -26,12 +26,12 @@ class FluentCalculatorTest extends TestCase
 		$this->assertSame(FluentCalculator::init()->one->minus->three(), -2);
 		$this->assertSame(FluentCalculator::init()->two->times->four->five(), 90);
 		$this->assertSame(5, FluentCalculator::init()->three->three->dividedBy->six());
-		$this->assertSame(FluentCalculator::init()->two->one->plus->three->times(), 24);
+		$this->assertSame(24, FluentCalculator::init()->two->one->plus->three->times());
 		$this->assertSame(FluentCalculator::init()->one->minus->three->times(), -2);
 		$this->assertSame(FluentCalculator::init()->two->times->four->five->minus(), 90);
 		$this->assertSame(FluentCalculator::init()->three->three->dividedBy->six->dividedBy(), 5);
 		$this->assertSame(7, FluentCalculator::init()->two->one->plus->dividedBy->three());
-		$this->assertSame(FluentCalculator::init()->one->zero->times->minus->three->three(), -23);
+		$this->assertSame(-23, FluentCalculator::init()->one->zero->times->minus->three->three());
 		$this->assertSame(FluentCalculator::init()->two->times->minus->four->five->seven(), -455);
     }
     public function testMoreThanOneOperations() {

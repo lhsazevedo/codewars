@@ -8,6 +8,7 @@ class FluentCalculator
   protected $b = '';
 
   protected $isA = true;
+  protected $isDirty = true;
 
   protected $operation;
 
@@ -18,6 +19,7 @@ class FluentCalculator
 	}
 
 	public function append($digit) {
+    $this->isDirty = true;
     $this->isA ? $this->a .= $digit : $this->b .= $digit;
   }
 
@@ -26,40 +28,61 @@ class FluentCalculator
     if (in_array($param, array_keys($this->digits))) {
       $this->append($this->digits[$param]);
     } else {
+      if ($this->operation && $this->isDirty) {
+        $this->a = (string) $this->{$param}();
+        $this->b = '';
+        $this->isDirty = false;
+        $this->isA = false;
+      }
+
       $this->operation = $param;
-      $this->isA = !$this->isA;
+      // if ($this->a && $this->b) {
+      //   $this->a = (string) $this->{$param}();
+      //   $this->b = '';
+      // }
+      if ($this->isDirty) $this->isA = !$this->isA;
+      $this->isDirty = false;
     }
 
     return $this;
   }
 
   public function __call($method, $args) {
-    if (in_array($method, $this->digits)) {
+    if (in_array($method, array_keys($this->digits))) {
       $this->append($this->digits[$method]);
-    } elseif ($method === 'minus') {
-      $this->operation = 'minus';
-      $this->isA = !$this->isA;
-    } elseif ($method === 'plus') {
-      $this->operation = 'plus';
-      $this->isA = !$this->isA;
-    } elseif ($method === 'times') {
-      $this->operation = 'times';
-      $this->isA = !$this->isA;
-    } elseif ($method === 'dividedBy') {
-      $this->operation = 'dividedBy';
-      $this->isA = !$this->isA;
+    } elseif (!$this->operation) {
+      if ($method === 'minus') {
+        $this->operation = 'minus';
+      } elseif ($method === 'plus') {
+        $this->operation = 'plus';
+      } elseif ($method === 'times') {
+        $this->operation = 'times';
+      } elseif ($method === 'dividedBy') {
+        $this->operation = 'dividedBy';
+      } else {
+        throw new InvalidInputException();
+      }
     }
 
     if ($this->operation == 'minus') {
-      return (int) $this->a - (int) $this->b;
+      $r = (int) $this->a - (int) $this->b;
     } elseif($this->operation == 'plus') {
-      return (int) $this->a + (int) $this->b;
+      $r = (int) $this->a + (int) $this->b;
     } elseif($this->operation == 'times') {
-      return (int) $this->a * (int) $this->b;
+      $r = (int) $this->a * (int) $this->b;
     }  elseif($this->operation == 'dividedBy') {
-      return (int) floor((int) $this->a / (int) $this->b);
+      $r = (int) floor((int) $this->a / (int) $this->b);
     } else {
-      return $this->isA ? (int) $this->a : (int) $this->b;
+      $r = $this->isA ? (int) $this->a : (int) $this->b;
     }
+
+    if ($r > 999999999) {
+      throw new DigitCountOverflowException();
+    }
+
+    return $r;
   }
 }
+
+class InvalidInputException extends Exception {}
+class DigitCountOverflowException extends Exception {}
