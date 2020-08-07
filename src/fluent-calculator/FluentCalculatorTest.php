@@ -76,4 +76,24 @@ class FluentCalculatorTest extends TestCase
 		$this->expectException(DigitCountOverflowException::class);
 		FluentCalculator::init()->one->zero->zero->zero->zero->zero->times->one->zero->zero->zero->zero->zero();
 	}
+	public function testCornerCaseCheck() {
+		$this->assertSame(1, FluentCalculator::init()->zero->zero->zero->zero->zero->zero->zero->zero->zero->zero->one());
+
+		$this->expectException(DigitCountOverflowException::class);
+		FluentCalculator::init()->four->six->nine->six->zero->minus->dividedBy->nine->dividedBy->five->five->nine->one->three->four->eight->nine->eight->five->six->times->four->times->seven->three->one->six->seven->five->plus->one->five->dividedBy->two->three->four->four();
+	}
+	public function testRandomCheck() {
+		$this->assertSame(0, FluentCalculator::init()->times->one->four->two->two->minus->three->minus->dividedBy->three->eight->plus->six->dividedBy->times->five->zero->dividedBy->seven->four->two->dividedBy->two->five->times->three->seven->four->one->three->times->six->eight->five->five->six->two->zero->three());
+		$this->assertSame(0, FluentCalculator::init()->seven->six->dividedBy->two->minus->times->minus->dividedBy->nine->seven->eight->seven->eight->three->seven->minus->zero->nine->times->times->plus->seven->zero->one->dividedBy->minus->five->six->seven->times->one->dividedBy->zero->two->nine->three->minus());
+		$this->assertSame(0, FluentCalculator::init()->nine->dividedBy->zero->two->eight->three->four->plus->plus->times->minus->dividedBy->seven->eight->zero->times->one->seven());
+		$this->assertSame(68822, FluentCalculator::init()->minus->seven->dividedBy->minus->minus->dividedBy->nine->dividedBy->two->times->four->dividedBy->seven->zero->times->six->nine->two->three->one->minus->five->zero->seven->times->five->nine->plus->times->minus->three->two->minus->plus->nine->seven->nine->seven->one->minus->plus->seven->nine->six->plus());
+		$this->assertSame(9, FluentCalculator::init()->nine->times->plus());
+		$this->assertSame(36, FluentCalculator::init()->five->times->minus->three->plus->one->minus->two->times->zero->minus->one->plus->five->times->nine->plus->times());
+
+		$this->expectException(DivisionByZeroException::class);
+		$this->assertSame(0, FluentCalculator::init()->one->plus->two->minus->times->zero->times->dividedBy->zero->plus->four());
+
+		$this->expectException(DigitCountOverflowException::class);
+		FluentCalculator::init()->three->plus->dividedBy->times->zero->zero->three->six->five->one->nine->five->five->two->two->three->six->plus->seven->six->three->five->one->eight->two->dividedBy->dividedBy->zero->seven();
+	}
 }
